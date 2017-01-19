@@ -1,0 +1,22 @@
+{
+  "name": "aurelia-express",
+  "version": "1.0.0",
+  "description": "Extended Express js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bojan Petkovic",
+  "license": "MIT",
+  "dependencies": {
+    "aurelia-dependency-injection": "^1.0.0",
+    "aurelia-logging": "^1.0.0",
+    "aurelia-metadata": "^1.0.0",
+    "aurelia-pal": "^1.0.0",
+    "aurelia-polyfills": "^1.1.1",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "glob": "^7.1.0"
+  }
+}
