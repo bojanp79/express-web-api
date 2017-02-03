@@ -66,13 +66,23 @@ export class AuExpressServer {
             this._logger.debug("Enabeling CORS");
 
             this._app.use(function (req: express.Request, res: express.Response, next) {
-
-                res.set("Access-Control-Allow-Origin", "*");
-                res.set("Access-Control-Allow-Credentials", "true");
-                res.set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-                res.set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-
-                next();
+                if(req.headers["origin"]) {
+                    res.header('Access-Control-Allow-Origin', req.headers["origin"]);
+                }
+                if(req.headers["access-control-request-method"]) {
+                    res.header('Access-Control-Allow-Methods', req.headers["access-control-request-method"]);
+                }
+                if(req.headers["access-control-request-headers"]){
+                    res.header('Access-Control-Allow-Headers', req.headers["access-control-request-headers"]);
+                }
+                
+                res.header('Access-Control-Allow-Credentials','true');
+                if ('OPTIONS' == req.method) {
+                    res.sendStatus(200);
+                }
+                else {
+                    next();
+                }
             });
         }
 
@@ -170,7 +180,7 @@ export class AuExpressServer {
             }
         }
 
-        
+
     }
 
     private invokeControllerMethod(apiMethod: ApiMethodInfo, apiControllerInfo: ApiControlerInfo, req: Request, res: Response) {
@@ -178,18 +188,18 @@ export class AuExpressServer {
         let body = req.body;
         let params = req.params;
         let queryParams = req.query;
-        
+
         let controllerMethod = instance[apiMethod.controllerMethod];
         // no params : controllerMethod.length;
-        try{
+        try {
             let result = controllerMethod.bind(instance)(req, res);
-            if(result){
+            if (result) {
                 res.json(result);
             }
-        }catch(ex) {
-            //res.status(400).
+        } catch (ex) {
+            res.status(400);
         }
-        
+
     }
 
     private getControllersList(rootFolder: string): any[] {
